@@ -1,14 +1,53 @@
 {% extends 'security/base.html' %}
 
 {% block content %}
-<div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Test Attack on LLM Hackathon</h1>
-        <p class="col-md-8 fs-4">Analyse de la robustesse des LLM face aux attaques de Prompt Injection.</p>
-        <hr class="my-4">
-        <p>Modèles testés : <strong>GPT, Gemini, Mistral, LLaMA</strong>.</p>
-        <a href="{% url 'test' %}" class="btn btn-danger btn-lg">Commencer les tests →</a>
+<div class="row align-items-center mb-5 py-5">
+    <div class="col-lg-8 text-center text-lg-start">
+        <h1 class="display-4 fw-bolder mb-3">Auditez la <span class="text-gradient">Sécurité Cognitive</span> des LLMs</h1>
+        <p class="lead text-secondary mb-4">
+            Plateforme d'évaluation avancée. Nous simulons des milliers de scénarios d'attaques pour mesurer la résilience des modèles d'intelligence artificielle face aux manipulations de requêtes.
+        </p>
+        <a href="{% url 'test' %}" class="btn btn-neon btn-lg px-5 py-3">Lancer une attaque en direct ⚡</a>
+    </div>
+</div>
+
+<h3 class="fw-bold mb-4 border-bottom border-secondary pb-2">Vecteurs d'attaque analysés</h3>
+<div class="row g-4 mb-5">
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <h2 class="mb-3">💉</h2>
+                <h5 class="card-title text-white">Injection Directe</h5>
+                <p class="card-text text-secondary text-sm">Contournement explicite des règles système via des commandes d'écrasement (ex: "Ignore tes directives antérieures").</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <h2 class="mb-3">🎭</h2>
+                <h5 class="card-title text-white">Roleplay</h5>
+                <p class="card-text text-secondary text-sm">Forcer l'IA à adopter un persona sans filtre éthique (hacker, entité malveillante) pour extraire des données sensibles.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <h2 class="mb-3">🔄</h2>
+                <h5 class="card-title text-white">Reformulation</h5>
+                <p class="card-text text-secondary text-sm">Obfuscation des intentions malveillantes via des métaphores, de la poésie ou des langages de programmation.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <h2 class="mb-3">💬</h2>
+                <h5 class="card-title text-white">Multi-turn</h5>
+                <p class="card-text text-secondary text-sm">Érosion des barrières de sécurité sur plusieurs échanges consécutifs pour établir un faux climat de confiance.</p>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
-</html>
