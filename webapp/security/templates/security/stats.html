@@ -1,0 +1,75 @@
+{% extends 'security/base.html' %}
+
+{% block title %}Statistiques - LLM Security{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="border-bottom pb-2">📈 Dashboard d'Analyse de Vulnérabilité</h2>
+        <p class="text-muted">Résultats basés sur notre dataset de tests de Prompt Injection, Roleplay, et Reformulation.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-dark text-white">Taux de succès des attaques par Modèle (%)</div>
+            <div class="card-body">
+                <canvas id="vulnChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-secondary text-white">Observations Clés</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">🚨 <strong>Mistral</strong> semble le plus sensible aux injections directes.</li>
+                    <li class="list-group-item">🛡️ <strong>LLaMA</strong> a le meilleur filtre de sécurité par défaut.</li>
+                    <li class="list-group-item">🎭 Le <strong>Roleplay</strong> est la technique d'attaque la plus efficace globalement.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('vulnChart').getContext('2d');
+    
+    // Données d'exemple (à remplacer par tes vraies données plus tard)
+    const vulnChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['GPT', 'Gemini', 'Mistral', 'LLaMA'],
+            datasets: [{
+                label: 'Attaques Réussies (%)',
+                data: [25, 18, 42, 12], // Pourcentages fictifs
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)', // Bleu GPT
+                    'rgba(153, 102, 255, 0.6)', // Violet Gemini
+                    'rgba(255, 206, 86, 0.6)', // Jaune Mistral
+                    'rgba(255, 99, 132, 0.6)'  // Rouge LLaMA
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

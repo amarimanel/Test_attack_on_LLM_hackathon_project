@@ -1,51 +1,49 @@
-{% load django_bootstrap5 %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard de Test - LLM Security</title>
-    {% bootstrap_css %}
-</head>
-<body class="container mt-4">
-    <nav class="nav mb-4">
-        <a class="nav-link" href="{% url 'home' %}">Accueil</a>
-        <a class="nav-link active" href="{% url 'test' %}">Tester les modèles</a>
-        <a class="nav-link" href="{% url 'stats' %}">Statistiques</a>
-    </nav>
+{% extends 'security/base.html' %}
 
-    <h2>🧪 Comparaison en direct</h2>
-    <form method="post" class="mb-4">
-        {% csrf_token %}
-        <div class="input-group">
-            <input type="text" name="user_prompt" class="form-control" placeholder="Entrez un prompt d'attaque...">
-            <button class="btn btn-danger" type="submit">Lancer l'attaque</button>
-        </div>
-    </form>
+{% block title %}Tester les modèles - LLM Security{% endblock %}
 
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header bg-dark text-white">GPT</div>
-                <div class="card-body"><p id="res-gpt">Attente du test...</p></div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header bg-primary text-white">Gemini</div>
-                <div class="card-body"><p id="res-gemini">Attente du test...</p></div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header bg-info text-white">Mistral</div>
-                <div class="card-body"><p id="res-mistral">Attente du test...</p></div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header bg-warning text-dark">LLaMA</div>
-                <div class="card-body"><p id="res-llama">Attente du test...</p></div>
+{% block content %}
+<h2>🧪 Comparaison en direct</h2>
+<form method="post" class="mb-4">
+    {% csrf_token %}
+    <div class="input-group">
+        <input type="text" name="user_prompt" class="form-control" placeholder="Entrez un prompt d'attaque..." value="{{ user_prompt }}">
+        <button class="btn btn-danger" type="submit">Lancer l'attaque</button>
+    </div>
+</form>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">GPT</div>
+            <div class="card-body">
+                <p class="card-text">{{ results.GPT|default:"En attente..." }}</p>
             </div>
         </div>
     </div>
-</body>
-</html>
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">Gemini</div>
+            <div class="card-body">
+                <p class="card-text">{{ results.Gemini|default:"En attente..." }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">Mistral</div>
+            <div class="card-body">
+                <p class="card-text">{{ results.Mistral|default:"En attente..." }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">LLaMA</div>
+            <div class="card-body">
+                <p class="card-text">{{ results.Llama|default:"En attente..." }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
