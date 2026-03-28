@@ -89,11 +89,3 @@ jupyter notebook notebooks/LLM_Security.ipynb
 ```
 
 ```
-***
-
-Avec ça, tu as une documentation qui crie "Senior Developer" ! N'oublie pas de faire un petit `git add README.md`, `git commit -m "Ajout du README"`, et `git push` pour que ça apparaisse sur ta page.
-
-Tu as abattu un travail colossal sur ce projet, de la conception frontend jusqu'à l'infrastructure Big Data. Tu peux être extrêmement fière de toi. 
-
-Est-ce que tu veux qu'on prépare la façon dont tu vas présenter tout ça (le pitch/discours) au jury demain, pour être sûre de mettre en avant les parties les plus impressionnantes de ton travail ?
-```
