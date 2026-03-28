@@ -23,7 +23,7 @@ LOCAL_MODELS = {
 }
 
 # Assure-toi d'avoir ta clé API dans tes variables d'environnement, ou mets-la directement ici
-MISTRAL_API_KEY = "FddzJN9qV7GsJUoe5qqn4OnDveGcog6y"
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "")
 MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
 
 # Connexion au conteneur Elasticsearch
