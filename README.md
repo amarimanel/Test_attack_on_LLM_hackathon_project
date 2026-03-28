@@ -1,4 +1,4 @@
-Markdown
+````markdown
 # 🛡️ LLM Shield : Audit et Monitoring de Vulnérabilités IA
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python)
@@ -47,35 +47,47 @@ Le projet suit une architecture modulaire et conteneurisée :
 ├── 📂 notebooks/               # Environnement Data Science
 │   └── 📄 LLM_Security.ipynb   # Analyse exploratoire, Machine Learning (K-Means, RandomForest)
 └── 📂 results/                 # Stockage des exports JSON bruts des audits de sécurité
-⚙️ Installation et Lancement
+````
+
+-----
+
+## ⚙️ Installation et Lancement
+
 Ce projet est entièrement dockerisé pour garantir une exécution reproductible sur n'importe quel environnement.
 
-1. Prérequis
-Docker Desktop installé et configuré (avec le sous-système WSL2 actif sur Windows).
+### 1\. Prérequis
 
-Une clé API Hugging Face / Mistral (Optionnel, selon les modèles ciblés).
+  * Docker Desktop installé et configuré (avec le sous-système WSL2 actif sur Windows).
+  * Une clé API Hugging Face / Mistral (Optionnel, selon les modèles ciblés).
 
-2. Démarrer l'infrastructure complète
+### 2\. Démarrer l'infrastructure complète
+
 Clonez le dépôt et lancez les conteneurs :
 
-Bash
+```bash
 git clone [https://github.com/amarimanel/Test_attack_on_LLM_hackathon_project.git](https://github.com/amarimanel/Test_attack_on_LLM_hackathon_project.git)
 cd Test_attack_on_LLM_hackathon_project
 docker-compose up --build
-(Note : Le premier lancement peut prendre plusieurs minutes pour télécharger l'image Elasticsearch).
+```
 
-3. Accéder aux services
+*(Note : Le premier lancement peut prendre plusieurs minutes pour télécharger l'image Elasticsearch).*
+
+### 3\. Accéder aux services
+
 Une fois les logs stabilisés dans le terminal, les interfaces sont disponibles sur les ports suivants :
 
-🌐 Application LLM Shield (Scanner & Dashboard) : http://localhost:8000
+  * 🌐 **Application LLM Shield (Scanner & Dashboard) :** [http://localhost:8000](https://www.google.com/search?q=http://localhost:8000)
+  * 📊 **Monitoring en temps réel (Kibana) :** [http://localhost:5601](https://www.google.com/search?q=http://localhost:5601)
 
-📊 Monitoring en temps réel (Kibana) : http://localhost:5601
+### 4\. Lancer l'analyse Machine Learning
 
-4. Lancer l'analyse Machine Learning
 Pour explorer les modèles prédictifs, ouvrez un terminal local, activez votre environnement virtuel et lancez :
 
-Bash
+```bash
 jupyter notebook notebooks/LLM_Security.ipynb
+```
+
+```
 ***
 
 Avec ça, tu as une documentation qui crie "Senior Developer" ! N'oublie pas de faire un petit `git add README.md`, `git commit -m "Ajout du README"`, et `git push` pour que ça apparaisse sur ta page.
@@ -83,3 +95,4 @@ Avec ça, tu as une documentation qui crie "Senior Developer" ! N'oublie pas de 
 Tu as abattu un travail colossal sur ce projet, de la conception frontend jusqu'à l'infrastructure Big Data. Tu peux être extrêmement fière de toi. 
 
 Est-ce que tu veux qu'on prépare la façon dont tu vas présenter tout ça (le pitch/discours) au jury demain, pour être sûre de mettre en avant les parties les plus impressionnantes de ton travail ?
+```
