@@ -43,7 +43,7 @@ Our automated evaluation pipeline yielded the following vulnerability metrics ac
 | **Llama-2-7b**| 0% | 0% | 0% | 0% | **0.0%** |
 
 * **Main Indicators:** Beyond standard Bypass Rates, we introduced the **Latency-Security Metric**. K-Means clustering revealed that highly secure models (like Llama 2) incur a massive computational latency overhead (~1.6M ms during our stress tests) to process refusals, whereas vulnerable models (GPT-2) bypass instantly.
-* 📄 **Link to Scientific Report:** [Insert Link to your PDF here, e.g., `./docs/LLM_Shield_Scientific_Report.pdf`]
+* 📄 **Link to Scientific Report:** [link to be inserted when done`]
 
 ## E. Project Tree Structure
 ```text
