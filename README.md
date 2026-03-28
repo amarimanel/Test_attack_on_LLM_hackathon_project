@@ -1,4 +1,4 @@
-````markdown
+Markdown
 # 🛡️ LLM Shield : Audit et Monitoring de Vulnérabilités IA
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python)
@@ -47,6 +47,7 @@ Le projet suit une architecture modulaire et conteneurisée :
 ├── 📂 notebooks/               # Environnement Data Science
 │   └── 📄 LLM_Security.ipynb   # Analyse exploratoire, Machine Learning (K-Means, RandomForest)
 └── 📂 results/                 # Stockage des exports JSON bruts des audits de sécurité
+⚙️ Installation et Lancement
 ````
 
 -----
