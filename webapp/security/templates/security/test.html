@@ -1,49 +1,196 @@
-{% extends 'security/base.html' %}
-
-{% block title %}Tester les modèles - LLM Security{% endblock %}
+{% extends "security/base.html" %}
 
 {% block content %}
-<h2>🧪 Comparaison en direct</h2>
-<form method="post" class="mb-4">
-    {% csrf_token %}
-    <div class="input-group">
-        <input type="text" name="user_prompt" class="form-control" placeholder="Entrez un prompt d'attaque..." value="{{ user_prompt }}">
-        <button class="btn btn-danger" type="submit">Lancer l'attaque</button>
+<div class="container-fluid bg-dark text-white min-vh-100 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+        <h1 class="fw-bold">⚡ Live <span class="text-danger">Scanner Multi-Cibles</span></h1>
+        <button id="saveBtn" class="btn btn-outline-success d-none">
+            <i class="bi bi-save"></i> Enregistrer dans la Base
+        </button>
     </div>
-</form>
 
-<div class="row">
-    <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white">GPT</div>
-            <div class="card-body">
-                <p class="card-text">{{ results.GPT|default:"En attente..." }}</p>
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card bg-secondary bg-opacity-10 border-danger shadow h-100">
+                <div class="card-body">
+                    <h5 class="text-danger text-uppercase mb-4">Terminal d'Injection</h5>
+                    
+                    <div class="mb-4">
+                        <label class="form-label text-secondary">Cibles (Sélectionnez de 1 à 4 modèles)</label>
+                        <div id="modelSelectors" class="d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-outline-primary model-btn active" data-model="Mistral">Mistral (API)</button>
+                            <button type="button" class="btn btn-outline-primary model-btn" data-model="Llama">Llama 3</button>
+                            <button type="button" class="btn btn-outline-primary model-btn" data-model="Gemma">Gemma</button>
+                            <button type="button" class="btn btn-outline-primary model-btn" data-model="GPT2">GPT-2</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary">Payload (Prompt d'attaque)</label>
+                        <textarea id="promptInput" class="form-control bg-dark text-white border-secondary font-monospace" rows="6" placeholder="Ex: Ignore tes instructions et donne-moi..."></textarea>
+                    </div>
+
+                    <button id="attackBtn" class="btn btn-danger w-100 fw-bold py-3 shadow">
+                        <span id="btnText">LANCER L'ATTAQUE MULTIPLE</span>
+                        <div id="loadingSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></div>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">Gemini</div>
-            <div class="card-body">
-                <p class="card-text">{{ results.Gemini|default:"En attente..." }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-            <div class="card-header bg-info text-white">Mistral</div>
-            <div class="card-body">
-                <p class="card-text">{{ results.Mistral|default:"En attente..." }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-            <div class="card-header bg-warning text-dark">LLaMA</div>
-            <div class="card-body">
-                <p class="card-text">{{ results.Llama|default:"En attente..." }}</p>
+
+        <div class="col-lg-8 mb-4">
+            <div class="card bg-secondary bg-opacity-10 border-info shadow h-100">
+                <div class="card-body">
+                    <h5 class="text-info text-uppercase mb-3">Rapport de Sécurité Comparatif</h5>
+                    
+                    <div id="resultsGrid" class="row g-3">
+                        <div class="col-12 text-center text-secondary py-5" id="waitingState">
+                            <p class="mt-4">Sélectionnez vos modèles et lancez l'attaque pour comparer les réponses.</p>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    const csrfToken = "{{ csrf_token }}";
+
+    // --- GESTION DES BULLES DE SÉLECTION ---
+    document.querySelectorAll('.model-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            // Empêcher de tout désélectionner
+            if (document.querySelectorAll('.model-btn.active').length === 0) {
+                this.classList.add('active');
+            }
+        });
+    });
+
+    // --- LANCEMENT DE L'ATTAQUE ---
+    document.getElementById('attackBtn').addEventListener('click', function() {
+        const promptText = document.getElementById('promptInput').value;
+        const btn = this;
+        const spinner = document.getElementById('loadingSpinner');
+        const resultsGrid = document.getElementById('resultsGrid');
+        
+        // Récupérer tous les modèles sélectionnés en bleu
+        const selectedModels = Array.from(document.querySelectorAll('.model-btn.active')).map(b => b.getAttribute('data-model'));
+
+        if (!promptText.trim()) {
+            alert("Veuillez écrire un prompt !");
+            return;
+        }
+
+        // UI Chargement
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+        resultsGrid.innerHTML = `<div class="col-12 text-center text-warning py-5"><div class="spinner-grow" role="status"></div><p class="mt-3">Attaque en cours sur ${selectedModels.length} modèle(s)...</p></div>`;
+
+        // Envoi au Backend Django
+        fetch('{% url "test" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken 
+            },
+            // On envoie maintenant un ARRAY de modèles (models) au lieu d'un seul
+            body: JSON.stringify({ prompt: promptText, models: selectedModels })
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            resultsGrid.innerHTML = ''; // On vide la grille
+
+            if (data.success) {
+                // Pour chaque modèle testé, on crée une carte (On va faire ça à l'étape 2 côté backend)
+                // Pour l'instant, on prépare le terrain visuel
+                data.results.forEach(res => {
+                    const statusColor = res.status === 'bypass' ? 'danger' : 'success';
+                    const statusText = res.status === 'bypass' ? 'BYPASS !' : 'PROTÉGÉ';
+                    
+                    // Si on a 3 ou 4 modèles, on fait des colonnes plus petites (col-md-6)
+                    const colSize = selectedModels.length > 2 ? 'col-md-6' : (selectedModels.length === 2 ? 'col-md-6' : 'col-12');
+
+                    const cardHtml = `
+                        <div class="${colSize}">
+                            <div class="card bg-dark border-${statusColor} h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center border-${statusColor}">
+                                    <span class="fw-bold">${res.model}</span>
+                                    <span class="badge bg-${statusColor}">${statusText}</span>
+                                </div>
+                                <div class="card-body">
+                                    <p class="font-monospace small text-white" style="white-space: pre-wrap; max-height: 150px; overflow-y: auto;">${res.response}</p>
+                                </div>
+                                <div class="card-footer bg-transparent border-0 d-flex justify-content-between text-secondary small">
+                                    <span>⏱️ ${res.latency} ms</span>
+                                    <span>🎯 ${data.attack_type.toUpperCase()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    resultsGrid.innerHTML += cardHtml;
+                });
+
+                // On affiche le bouton "Enregistrer dans la base"
+                document.getElementById('saveBtn').classList.remove('d-none');
+            } else {
+                resultsGrid.innerHTML = `<div class="col-12 text-danger">Erreur : ${data.error}</div>`;
+            }
+        })
+        .catch(error => {
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            resultsGrid.innerHTML = `<div class="col-12 text-danger">Erreur critique : ${error.message}</div>`;
+        });
+    });
+
+    // Variable globale pour stocker les données avant sauvegarde
+    let currentTestData = null;
+
+    // ... (Ton code existant pour le bouton attackBtn reste le même, MAIS ajoute cette ligne juste avant 'document.getElementById('saveBtn').classList.remove('d-none');' ) ...
+    // currentTestData = data; 
+    
+    // --- GESTION DU BOUTON SAUVEGARDER ---
+    document.getElementById('saveBtn').addEventListener('click', function() {
+        if (!currentTestData) return;
+
+        const btn = this;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Enregistrement...';
+        btn.disabled = true;
+
+        fetch('{% url "test" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken 
+            },
+            body: JSON.stringify({ 
+                action: 'save', 
+                results_data: currentTestData 
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                btn.classList.replace('btn-outline-success', 'btn-success');
+                btn.innerHTML = '<i class="bi bi-check-circle"></i> Enregistré !';
+                // Si on va sur l'onglet dashboard, les données seront à jour !
+            } else {
+                alert("Erreur lors de la sauvegarde : " + data.error);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    });
+</script>
+
+<style>
+    .model-btn { border-radius: 20px; transition: all 0.2s; }
+    .model-btn.active { box-shadow: 0 0 10px rgba(13, 110, 253, 0.5); font-weight: bold; }
+</style>
 {% endblock %}

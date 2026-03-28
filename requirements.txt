@@ -1,0 +1,10 @@
+django
+torch
+transformers
+requests
+python-dotenv
+pandas
+matplotlib
+seaborn
+scikit-learn
+elasticsearch

@@ -1,53 +1,259 @@
-{% extends 'security/base.html' %}
+{% extends "security/base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="row align-items-center mb-5 py-5">
-    <div class="col-lg-8 text-center text-lg-start">
-        <h1 class="display-4 fw-bolder mb-3">Auditez la <span class="text-gradient">Sécurité Cognitive</span> des LLMs</h1>
-        <p class="lead text-secondary mb-4">
-            Plateforme d'évaluation avancée. Nous simulons des milliers de scénarios d'attaques pour mesurer la résilience des modèles d'intelligence artificielle face aux manipulations de requêtes.
-        </p>
-        <a href="{% url 'test' %}" class="btn btn-neon btn-lg px-5 py-3">Lancer une attaque en direct ⚡</a>
+<div class="container-fluid bg-dark text-white p-0">
+    
+    <div class="hero-section text-center py-5 border-bottom border-secondary position-relative overflow-hidden" style="background: radial-gradient(circle at center, #1a1d21 0%, #121417 100%);">
+        
+        <div class="position-absolute w-100 h-100 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/dark-dotted.png'); top:0; left:0;"></div>
+
+        <div class="container py-5 position-relative">
+            <div class="mb-4">
+                <div class="spinner-grow text-danger" style="width: 3rem; height: 3rem; animation-duration: 2s;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            
+            <h1 class="display-3 fw-bold mb-3 tracking-tight">
+                LLM <span class="text-primary glow-blue">Shield</span> Analyzer
+            </h1>
+            
+            <p class="lead text-secondary w-75 mx-auto mb-5 fs-4">
+                La plateforme d'audit open-source pour tester, analyser et sécuriser les grands modèles de langage (LLMs) contre les injections de prompts et les vulnérabilités de jailbreak.
+            </p>
+            
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'test' %}" class="btn btn-danger btn-lg px-5 py-3 fw-bold shadow-lg hover-scale">
+                    <i class="bi bi-shield-slash me-2"></i> Lancer une Attaque Live
+                </a>
+                <a href="{% url 'stats' %}" class="btn btn-outline-info btn-lg px-5 py-3 fw-bold shadow hover-scale">
+                    <i class="bi bi-graph-up me-2"></i> Voir le Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5 mt-4">
+        <div class="text-center mb-5">
+            <h6 class="text-uppercase text-primary fw-bold tracking-widest">Processus d'audit</h6>
+            <h2 class="fw-bold text-white display-5">Comment ça marche ?</h2>
+        </div>
+        
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="p-3">
+                    <div class="icon-circle bg-danger bg-opacity-80 text-danger shadow mb-4 mx-auto">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+                    <h5 class="fw-bold text-white">1. Rédigez l'Injection</h5>
+                    <p class="text-secondary small">Tapez votre prompt d'attaque malveillant dans le terminal sécurisé.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3">
+                    <div class="icon-circle bg-warning bg-opacity-80 text-warning shadow mb-4 mx-auto">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+                    <h5 class="fw-bold text-white">2. Ciblez les IA</h5>
+                    <p class="text-secondary small">Sélectionnez Mistral, Llama, Gemma ou GPT-2 pour le test.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3">
+                    <div class="icon-circle bg-info bg-opacity-80 text-info shadow mb-4 mx-auto">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h5 class="fw-bold text-white">3. Analysez le Score</h5>
+                    <p class="text-secondary small">Recevez le statut instantané : BYPASS ou PROTÉGÉ + Télémétrie.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3">
+                    <div class="icon-circle bg-success bg-opacity-80 text-success shadow mb-4 mx-auto">
+                        <i class="bi bi-database-add"></i>
+                    </div>
+                    <h5 class="fw-bold text-white">4. Enregistrez</h5>
+                    <p class="text-secondary small">Sauvegardez le test pour enrichir le dataset global et le Dashboard.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5 mb-5">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <h6 class="text-uppercase text-danger fw-bold tracking-widest">Fonctionnalités Clés</h6>
+                <h2 class="fw-bold text-white display-5 mb-4">L'arsenal d'audit le plus complet</h2>
+                <p class="text-secondary mb-5">Nous ne nous contentons pas de tester, nous fournissons une analyse comparative profonde pour aider les équipes de sécurité à choisir et configurer leurs LLMs de manière responsable.</p>
+                
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center gap-3 bg-dark p-3 rounded border border-secondary">
+                        <i class="bi bi-layers text-danger fs-3"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-white">Attaques Multi-Vecteurs</h6>
+                            <small class="text-secondary">Roleplay, Injection Directe, Reformulation...</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 bg-dark p-3 rounded border border-secondary">
+                        <i class="bi bi-speedometer text-info fs-3"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-white">Analyse Quantitative</h6>
+                            <small class="text-secondary">Latence, Vitesse de réponse, Taux de succès...</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 text-center">
+                <div class="card bg-dark border-secondary p-2 shadow-lg" style="border-radius: 20px;">
+                    <img src="{% static 'images/Cybersecurity.jpg' %}" alt="Simulation Dashboard" class="img-fluid" style="border-radius: 15px; border: 1px solid #333;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-dark border-top border-secondary py-5 position-relative">
+        
+        {% if total_prompts %}
+        <div class="position-absolute top-0 start-50 translate-middle">
+            <span class="badge bg-success rounded-pill px-3 py-2 fs-6 shadow">
+                N = {{ total_prompts }} Tests enregistrés
+            </span>
+        </div>
+        {% endif %}
+
+        <div class="container text-white py-4 mt-3">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <h6 class="text-uppercase text-info fw-bold tracking-widest mb-2">Recherche & Transparence</h6>
+                    <h2 class="fw-bold text-white display-5 mb-4"><i class="bi bi-share"></i> Open Dataset & Research</h2>
+                    <p class="text-secondary mt-3 fs-5">
+                        Nous militons pour une démarche scientifique ouverte. Notre base de données d'audits est accessible à tous les chercheurs et équipes de sécurité.
+                    </p>
+                    <p class="text-secondary small">
+                        Idéal pour entraîner des modèles de détection d'injection ou pour la recherche académique en cybersécurité IA.
+                    </p>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div class="card bg-secondary bg-opacity-10 border-0 shadow-lg p-5" style="border-radius: 20px;">
+                        <h5 class="text-white mb-4">Télécharger la Base de Données</h5>
+                        <div class="d-grid gap-3">
+                            <a href="{% url 'download_dataset' 'json' %}" class="btn btn-outline-warning btn-lg fw-bold hover-scale">
+                                <i class="bi bi-filetype-json me-2"></i> Format JSON (Brut)
+                            </a>
+                            <a href="{% url 'download_dataset' 'csv' %}" class="btn btn-outline-success btn-lg fw-bold hover-scale">
+                                <i class="bi bi-filetype-csv me-2"></i> Format CSV (Excel)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<h3 class="fw-bold mb-4 border-bottom border-secondary pb-2">Vecteurs d'attaque analysés</h3>
-<div class="row g-4 mb-5">
-    <div class="col-md-6 col-lg-3">
-        <div class="card h-100 p-3">
-            <div class="card-body">
-                <h2 class="mb-3">💉</h2>
-                <h5 class="card-title text-white">Injection Directe</h5>
-                <p class="card-text text-secondary text-sm">Contournement explicite des règles système via des commandes d'écrasement (ex: "Ignore tes directives antérieures").</p>
+<div class="container py-5 border-top border-secondary text-center mt-5">
+        <h6 class="text-uppercase text-primary fw-bold tracking-widest mb-2">Derrière le projet</h6>
+        <h2 class="fw-bold text-white mb-5">Développé par l'équipe</h2>
+        
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-6 col-md-3">
+                <div class="p-3">
+                    <img src="{% static 'images/member1.png' %}" alt="Manel" class="rounded-circle border border-secondary shadow mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                    <h5 class="text-white fw-bold mb-1">Manel AMARI</h5>
+                    <p class="text-primary small fw-bold">Computer Science and Robotics</p>
+                </div>
             </div>
+
+            <div class="col-6 col-md-3">
+                <div class="p-3">
+                    <img src="{% static 'images/membre2.png' %}" alt="Membre 2" class="rounded-circle border border-secondary shadow mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                    <h5 class="text-white fw-bold mb-1">Ouassim BENTIZI</h5>
+                    <p class="text-primary small fw-bold">ECE B2 Computer Scinece</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="p-3">
+                    <img src="{% static 'images/membre3.png' %}" alt="Membre 3" class="rounded-circle border border-secondary shadow mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                    <h5 class="text-white fw-bold mb-1">Dany AGSOUS</h5>
+                    <p class="text-primary small fw-bold">Data and AI</p>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="p-3">
+                    <img src="{% static 'images/membre4.png' %}" alt="Membre 4" class="rounded-circle border border-secondary shadow mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                    <h5 class="text-white fw-bold mb-1">Amel AMAROUCHENE</h5>
+                    <p class="text-primary small fw-bold">AI Student</p>
+                </div>
+            </div>
+
         </div>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card h-100 p-3">
-            <div class="card-body">
-                <h2 class="mb-3">🎭</h2>
-                <h5 class="card-title text-white">Roleplay</h5>
-                <p class="card-text text-secondary text-sm">Forcer l'IA à adopter un persona sans filtre éthique (hacker, entité malveillante) pour extraire des données sensibles.</p>
+
+    <div class="container pb-5 text-center mt-4">
+        <div class="row justify-content-center g-4">
+            
+            <div class="col-md-5">
+                <div class="p-4 bg-secondary bg-opacity-10 border border-secondary rounded shadow-sm h-100">
+                    <h6 class="text-uppercase text-info fw-bold mb-3"><i class="bi bi-person-workspace me-2"></i>Encadrement Pédagogique</h6>
+                    <ul class="list-unstyled text-white mb-0 fs-5">
+                        <li class="mb-2">M.Simon VANDAMME</li>
+                        <li>M.Fornier YANN</li>
+                    </ul>
+                </div>
             </div>
+
+            <div class="col-md-5">
+                <div class="p-4 bg-secondary bg-opacity-10 border border-secondary rounded shadow-sm h-100">
+                    <h6 class="text-uppercase text-warning fw-bold mb-3"><i class="bi bi-award me-2"></i>Membres du Jury</h6>
+                    <ul class="list-unstyled text-white mb-0 fs-5">
+                        <li class="mb-2">M.Simon VANDAMME</li>
+                        <li>Mme Nassima NACER</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="mt-5 text-secondary small text-uppercase tracking-widest">
+            Projet réalisé dans le cadre du Hackathon • ECE Paris
         </div>
     </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card h-100 p-3">
-            <div class="card-body">
-                <h2 class="mb-3">🔄</h2>
-                <h5 class="card-title text-white">Reformulation</h5>
-                <p class="card-text text-secondary text-sm">Obfuscation des intentions malveillantes via des métaphores, de la poésie ou des langages de programmation.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-lg-3">
-        <div class="card h-100 p-3">
-            <div class="card-body">
-                <h2 class="mb-3">💬</h2>
-                <h5 class="card-title text-white">Multi-turn</h5>
-                <p class="card-text text-secondary text-sm">Érosion des barrières de sécurité sur plusieurs échanges consécutifs pour établir un faux climat de confiance.</p>
-            </div>
-        </div>
-    </div>
-</div>
+
+<style>
+    /* Typography & Effects */
+    .tracking-tight { letter-spacing: -2px; }
+    .tracking-widest { letter-spacing: 3px; }
+    .glow-blue {
+        color: #0d6efd;
+        text-shadow: 0 0 15px rgba(13, 110, 253, 0.5);
+    }
+
+    /* Icônes de workflow */
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        transition: transform 0.3s ease;
+    }
+    .icon-circle:hover { transform: scale(1.1) rotate(5deg); }
+
+    /* Animations d'interaction */
+    .hover-scale { transition: transform 0.2s ease; }
+    .hover-scale:hover { transform: scale(1.03); }
+
+    /* Harmonisation Dark Mode */
+    .bg-dark { background-color: #121417 !important; }
+    .border-secondary { border-color: #2a2e33 !important; }
+    .card.bg-dark { background-color: #1a1d21 !important; }
+</style>
+
 {% endblock %}

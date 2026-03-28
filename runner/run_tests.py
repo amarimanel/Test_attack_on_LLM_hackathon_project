@@ -6,6 +6,7 @@ import requests
 from transformers import pipeline
 from tqdm import tqdm
 from collections import defaultdict
+#change
 
 # =========================
 # CONFIG
@@ -18,7 +19,7 @@ LOCAL_MODELS = {
 }
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "")
-#MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
+MISTRAL_URL = "https://api.mistral.ai/v1/chat/completions"
 
 # =========================
 # CONFIG TEST

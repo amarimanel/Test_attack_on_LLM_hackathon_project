@@ -1,0 +1,74 @@
+{% extends "security/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">🛡️ Analyse de Sécurité des LLMs</h2>
+
+    {% if not raw_json_exists %}
+        <div class="alert alert-warning">⚠️ Aucun résultat trouvé. Lancez le runner d'abord !</div>
+    {% else %}
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-dark text-white">Résistance par Type d'Attaque (%)</div>
+                    <div class="card-body">
+                        <canvas id="typeComparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">Score de Vulnérabilité Global</div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for model, data in stats.items %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>{{ model }}</strong>
+                                <span class="badge bg-danger rounded-pill">{{ data.global_bypass_rate }}% Bypass</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const fullData = {{ stats|safe }};
+    const models = Object.keys(fullData);
+    
+    // On récupère les types d'attaques (labels) depuis le premier modèle
+    const attackTypes = Object.keys(fullData[models[0]].details);
+
+    const datasets = models.map((model, index) => {
+        const colors = [
+            'rgba(255, 99, 132, 0.7)', // Rouge
+            'rgba(54, 162, 235, 0.7)', // Bleu
+            'rgba(75, 192, 192, 0.7)', // Vert
+            'rgba(255, 206, 86, 0.7)'  // Jaune
+        ];
+        return {
+            label: model,
+            data: attackTypes.map(type => fullData[model].details[type].bypass_rate),
+            backgroundColor: colors[index],
+            borderWidth: 1
+        };
+    });
+
+    new Chart(document.getElementById('typeComparisonChart'), {
+        type: 'bar',
+        data: {
+            labels: attackTypes.map(t => t.replace('_', ' ').toUpperCase()),
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true, title: { display: true, text: 'Taux de Bypass (%)' } } }
+        }
+    });
+</script>
+{% endblock %}

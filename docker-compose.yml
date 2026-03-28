@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Ton application Django
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - ~/.cache/huggingface:/root/.cache/huggingface # Partage les modèles IA locaux
+    ports:
+      - "8000:8000"
+    environment:
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+
+  # Le moteur de recherche et stockage
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # 🚨 OBLIGATOIRE : Limite Java à 512 Mo
+    ports:
+      - "9200:9200"
+    mem_limit: 1g # 🚨 OBLIGATOIRE : Coupe le container s'il dépasse 1 Go de RAM totale
+
+  # L'interface de visualisation
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
