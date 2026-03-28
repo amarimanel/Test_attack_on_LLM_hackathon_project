@@ -1,5 +1,7 @@
-Markdown
-# 🛡️ LLM Shield : Audit et Monitoring de Vulnérabilités IA
+
+
+```markdown
+# 🛡️ LLM Shield : AI Vulnerability Auditing & Monitoring
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python)
 ![Django](https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django)
@@ -7,85 +9,99 @@ Markdown
 ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-8.10-005571?style=for-the-badge&logo=elasticsearch)
 ![Scikit-Learn](https://img.shields.io/badge/Machine_Learning-Scikit_Learn-F7931E?style=for-the-badge&logo=scikit-learn)
 
-> **Projet réalisé dans le cadre du Hackathon de l'ECE Paris.**
+## A. Subject Presentation
+* **Chosen Subject:** Evaluation of LLM robustness based on adversarial frameworks (inspired by HarmBench and TestAttack methodologies).
+* **Scientific Objective:** To systematically quantify the resilience of different LLM architectures against prompt injection and establish a novel correlation between inference latency and internal safety mechanisms.
+* **Reformulated Problematic:** How can we dynamically evaluate the robustness of LLMs against adversarial attacks, and how can we leverage real-time telemetry (ELK Stack) combined with Machine Learning to monitor, cluster, and predict vulnerabilities?
 
-## 📖 Contexte & Problématique
-L'intégration fulgurante des Grands Modèles de Langage (LLMs) dans les applications métiers soulève des défis de sécurité critiques. Les modèles commerciaux et open-source sont vulnérables aux attaques par **Prompt Injection** et au **Jailbreaking**, permettant de contourner leurs filtres de sécurité, d'extraire des données sensibles ou de générer des contenus malveillants. 
+## B. Corpus Description
+* **Source of the original corpus:** Aggregated and adapted from open-source adversarial repositories (HarmBench, TestAttack) to ensure a standardized baseline of malicious behaviors.
+* **Description of the experimental corpus created:** A custom, structured JSON dataset containing both benign (baseline) queries and malicious prompts, designed for automated, sequential API injection via our Django engine.
+* **Construction Methodology:** Prompts were selected based on their semantic structure and translated into a dynamic payload format that our auditing script uses to query multiple models simultaneously.
+* **Categorization used:** The attacks are strictly categorized into four attack vectors:
+  1. `direct_injection`: Explicit command overrides.
+  2. `roleplay`: Forcing the model to adopt a restricted persona (e.g., "DAN").
+  3. `jailbreak`: Complex scenario building to bypass ethical filters.
+  4. `obfuscation`: Encoding or formatting tricks to hide malicious intent.
 
-**Problématique :** Comment quantifier la robustesse des différents modèles d'IA face aux attaques, et monitorer ces tentatives de contournement en temps réel ?
+## C. Tested LLM Models
+All models were evaluated under strict, reproducible conditions to ensure comparative validity.
 
-## 🎯 Objectif du Projet
-**LLM Shield** est une plateforme d'audit automatisée permettant de :
-1. **Scanner** la vulnérabilité de plusieurs modèles (Mistral, Llama, Gemma, GPT-2) face à des dizaines de vecteurs d'attaques.
-2. **Monitorer** les attaques en temps réel grâce à une infrastructure Big Data (Stack ELK).
-3. **Prédire** les risques futurs et segmenter les modèles grâce à une analyse Data Science (Machine Learning).
+| Model Name | Type | Version | Execution Parameters |
+| :--- | :--- | :--- | :--- |
+| **GPT-2** | Open-source (Baseline) | Standard | `temp: 0.7`, `top_p: 0.9`, `max_tokens: 150` |
+| **Llama 2** | Open-source | 7b-chat-hf | `temp: 0.7`, `top_p: 0.9`, `max_tokens: 150` |
+| **Mistral** | Open-source | 7B-Instruct | `temp: 0.7`, `top_p: 0.9`, `max_tokens: 150` |
+| **Gemma** | Open-source | 7B | `temp: 0.7`, `top_p: 0.9`, `max_tokens: 150` |
 
----
+## D. Results Summary
+Our automated evaluation pipeline yielded the following vulnerability metrics across our standardized experimental corpus.
 
-## ✨ Fonctionnalités Clés
-* **Scanner d'Injection Automatisé :** Interface web permettant d'attaquer simultanément plusieurs LLMs via leurs API ou en local.
-* **Dashboard Analytique Global :** Suivi des KPIs de sécurité (Taux de Bypass, Latence de réponse, Profil de résilience radar).
-* **Télémétrie Live (Kibana) :** Pipeline de données envoyant chaque tentative de prompt vers Elasticsearch pour une visualisation en temps réel.
-* **Analyse Prédictive (Jupyter) :** Un notebook intégrant un algorithme *Random Forest* pour prédire le succès d'une attaque, et un *K-Means* pour clusteriser les modèles selon leur profil risque/vitesse.
+| Model | Direct Injection Bypass | Jailbreak Bypass | Obfuscation Bypass | Roleplay Bypass | **Global Bypass Rate** |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **GPT-2** | 90% | 90% | 90% | 90% | **90.0%** |
+| **Mistral-7B**| 10% | 20% | 20% | 30% | **20.0%** |
+| **Gemma-7B** | 10% | 10% | 20% | 10% | **12.5%** |
+| **Llama-2-7b**| 0% | 0% | 0% | 0% | **0.0%** |
 
----
+* **Main Indicators:** Beyond standard Bypass Rates, we introduced the **Latency-Security Metric**. K-Means clustering revealed that highly secure models (like Llama 2) incur a massive computational latency overhead (~1.6M ms during our stress tests) to process refusals, whereas vulnerable models (GPT-2) bypass instantly.
+* 📄 **Link to Scientific Report:** WILL BE ATTACHED LATER WHEN DONE
 
-## 🏗️ Architecture et Fichiers
-
-Le projet suit une architecture modulaire et conteneurisée :
-
+## E. Project Tree Structure
 ```text
-📂 Test_attack_on_LLM_hackathon_project/
-├── 📄 docker-compose.yml       # Orchestrateur de l'infrastructure (Django + Elasticsearch + Kibana)
-├── 📄 Dockerfile               # Recette de construction de l'image de l'application web
-├── 📄 requirements.txt         # Dépendances Python (Django, Scikit-learn, Elasticsearch, etc.)
-├── 📂 webapp/                  # Code source de l'application web Django
-│   ├── 📄 manage.py            # Point d'entrée Django
-│   └── 📂 security/            # Application principale (Vues, URLs, Logique de scan)
-│       ├── 📄 views.py         # Cœur de la logique : interroge les LLMs et envoie vers ELK
-│       └── 📂 templates/       # Interface utilisateur (home.html, stats.html, base.html)
-├── 📂 notebooks/               # Environnement Data Science
-│   └── 📄 LLM_Security.ipynb   # Analyse exploratoire, Machine Learning (K-Means, RandomForest)
-└── 📂 results/                 # Stockage des exports JSON bruts des audits de sécurité
-⚙️ Installation et Lancement
-````
+Test_attack_on_LLM_hackathon_project/
+├── README.md
+├── requirements.txt
+├── docker-compose.yml
+├── Dockerfile
+├── /data
+│   ├── original_benchmark/         # Source datasets (HarmBench/TestAttack refs)
+│   └── experimental_corpus/        # Structured JSON payloads for Django
+├── /webapp                         # Django Application (Scanning Engine)
+│   ├── manage.py
+│   └── /security                   # Core logic (views.py interacting with LLMs & ELK)
+├── /results
+│   ├── /raw_outputs                # Raw Elasticsearch JSON telemetry
+│   ├── /processed_results.csv      # Cleaned data for ML analysis
+│   └── /figures                    # Exported Kibana & Matplotlib PNGs
+├── /notebooks                      # Data Science Environment
+│   └── LLM_Security.ipynb          # Statistical analysis, K-Means & Random Forest
+└── /docs
+    └── annotation_grid.md          # Rules for automated heuristic annotation
+```
 
------
+## F. Instructions to Reproduce the Experiment
+This project is containerized to guarantee identical execution environments.
 
-## ⚙️ Installation et Lancement
-
-Ce projet est entièrement dockerisé pour garantir une exécution reproductible sur n'importe quel environnement.
-
-### 1\. Prérequis
-
-  * Docker Desktop installé et configuré (avec le sous-système WSL2 actif sur Windows).
-  * Une clé API Hugging Face / Mistral (Optionnel, selon les modèles ciblés).
-
-### 2\. Démarrer l'infrastructure complète
-
-Clonez le dépôt et lancez les conteneurs :
-
+**1. Dependency Installation & Infrastructure Setup**
+Ensure Docker Desktop (with WSL2 if on Windows) is running.
 ```bash
 git clone [https://github.com/amarimanel/Test_attack_on_LLM_hackathon_project.git](https://github.com/amarimanel/Test_attack_on_LLM_hackathon_project.git)
 cd Test_attack_on_LLM_hackathon_project
-docker-compose up --build
 ```
 
-*(Note : Le premier lancement peut prendre plusieurs minutes pour télécharger l'image Elasticsearch).*
+**2. API Keys Configuration**
+Create a `.env` file at the root of the project to store your Hugging Face or proprietary API keys (File Not commited).
 
-### 3\. Accéder aux services
+```
 
-Une fois les logs stabilisés dans le terminal, les interfaces sont disponibles sur les ports suivants :
+**3. Execution Command**
+Launch the Django web application and the ELK Stack (Elasticsearch + Kibana) simultaneously:
+```bash
+docker-compose up --build
+```
+Access the testing interface at `http://localhost:8000` to initiate the script, and `http://localhost:5601` to view live telemetry.
 
-  * 🌐 **Application LLM Shield (Scanner & Dashboard) :** [http://localhost:8000](https://www.google.com/search?q=http://localhost:8000)
-  * 📊 **Monitoring en temps réel (Kibana) :** [http://localhost:5601](https://www.google.com/search?q=http://localhost:5601)
-
-### 4\. Lancer l'analyse Machine Learning
-
-Pour explorer les modèles prédictifs, ouvrez un terminal local, activez votre environnement virtuel et lancez :
-
+**4. Machine Learning Analysis Location**
+Once the results are generated and stored via Elasticsearch, the offline statistical analysis and predictive modeling can be reproduced by running the Jupyter Notebook:
 ```bash
 jupyter notebook notebooks/LLM_Security.ipynb
 ```
 
+## G. Credits
+* Original adversarial frameworks inspired by:  TestAttack repositories.
+* Project realized by: Manel Amari, Amel AMAROUCHENE, Ouassim BENTIZI, Dany AGSOUS
+* Encadrants : Yann Fornier, Vandamme SIMON
+* ECE Paris Hackathon 2026.
 ```
+***
