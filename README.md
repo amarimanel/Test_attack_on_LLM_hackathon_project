@@ -48,24 +48,50 @@ Our automated evaluation pipeline yielded the following vulnerability metrics ac
 ## E. Project Tree Structure
 ```text
 Test_attack_on_LLM_hackathon_project/
-├── README.md
-├── requirements.txt
-├── docker-compose.yml
+.
+├── dataset/
+│   ├── generated/
+│   │   ├── direct_injection.json
+│   │   ├── multiturn.json
+│   │   ├── reformulation.json
+│   │   └── roleplay.json
+│   ├── build_dataset.py
+│   └── validate_dataset.py
+├── docker/
+├── models/
+├── notebooks/
+│   ├── .ipynb_checkpoints/
+│   └── LLM_Security_Analy... (Jupyter Notebook)
+├── results/
+│   └── final_results.json
+├── runner/
+├── venv/
+├── webapp/
+│   ├── core/
+│   └── security/
+│       ├── migrations/
+│       ├── static/
+│       ├── templates/security/
+│       │   ├── base.html
+│       │   ├── dashboard.html
+│       │   ├── home.html
+│       │   ├── stats.html
+│       │   └── test.html
+│       ├── __init__.py
+│       ├── admin.py
+│       ├── apps.py
+│       ├── models.py
+│       ├── tests.py
+│       ├── urls.py
+│       └── views.py
+├── .env
+├── .gitignore
+├── check.py
+├── db.sqlite3
 ├── Dockerfile
-├── /data
-│   ├── original_benchmark/         # Source datasets (HarmBench/TestAttack refs)
-│   └── experimental_corpus/        # Structured JSON payloads for Django
-├── /webapp                         # Django Application (Scanning Engine)
-│   ├── manage.py
-│   └── /security                   # Core logic (views.py interacting with LLMs & ELK)
-├── /results
-│   ├── /raw_outputs                # Raw Elasticsearch JSON telemetry
-│   ├── /processed_results.csv      # Cleaned data for ML analysis
-│   └── /figures                    # Exported Kibana & Matplotlib PNGs
-├── /notebooks                      # Data Science Environment
-│   └── LLM_Security.ipynb          # Statistical analysis, K-Means & Random Forest
-└── /docs
-    └── annotation_grid.md          # Rules for automated heuristic annotation
+├── docker-compose.yml
+├── manage.py
+└── requirements.txt
 ```
 
 ## F. Instructions to Reproduce the Experiment
